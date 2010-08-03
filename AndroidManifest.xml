@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="br.com.portovias"
+      android:versionCode="1"
+      android:versionName="1.0">
+    <application android:icon="@drawable/icon" android:label="@string/app_name">
+ 
+		<receiver android:name=".PortoviasAppWidgetProvider" android:label="@string/app_name">
+		    <intent-filter>
+		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+		    </intent-filter>
+		    <meta-data android:name="android.appwidget.provider"
+		               android:resource="@xml/portovias_appwidget_info" />
+		</receiver>
+		
+		 <activity
+            android:name=".Portovias"
+            android:label="@string/app_name" >
+            	<intent-filter>
+        			<action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+   				 </intent-filter>
+         </activity>	
+    </application>
+	<uses-permission android:name="android.permission.INTERNET" />
+</manifest> 
