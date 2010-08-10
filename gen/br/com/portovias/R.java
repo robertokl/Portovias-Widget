@@ -15,12 +15,16 @@ public final class R {
         public static final int icon=0x7f020001;
     }
     public static final class id {
+        public static final int AbsoluteLayout01=0x7f060005;
+        public static final int LastUpdatedTextView=0x7f060009;
         public static final int LoginView=0x7f060000;
         public static final int Password=0x7f060002;
-        public static final int ResultText=0x7f060005;
+        public static final int ProgressBarLayour=0x7f060007;
+        public static final int ResultText=0x7f060006;
         public static final int Submit=0x7f060003;
         public static final int Username=0x7f060001;
         public static final int WidgetLayout=0x7f060004;
+        public static final int WidgetProgressBar=0x7f060008;
     }
     public static final class layout {
         public static final int main=0x7f030000;
