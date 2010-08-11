@@ -9,9 +9,9 @@
 		android:layout_width="wrap_content" android:layout_height="wrap_content">
 		<TextView android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:id="@+id/ResultText"
-			android:text="xxxxxxxxxxxxxxxxxxxx" android:textColor="#666666"
+			android:text="Carregando..." android:textColor="#666666"
 			android:paddingTop="13sp" android:paddingLeft="16sp"
-			android:maxWidth="146sp"></TextView>
+			android:maxWidth="146sp" android:textSize="12sp"></TextView>
 
 		<AbsoluteLayout android:id="@+id/ProgressBarLayour"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -21,6 +21,6 @@
 				style="?android:attr/progressBarStyleSmall" android:paddingTop="16sp"
 				android:layout_x="130sp"></ProgressBar>
 		</AbsoluteLayout>
-		<TextView android:text="nunca" android:id="@+id/LastUpdatedTextView" android:textColor="#FF0000" android:textSize="10sp" android:paddingTop="275sp" android:gravity="right" android:layout_height="wrap_content" android:layout_width="fill_parent" android:minWidth="145sp"></TextView>
+		<TextView android:text="nunca" android:id="@+id/LastUpdatedTextView" android:textColor="#FF0000" android:paddingTop="275sp" android:gravity="right" android:layout_height="wrap_content" android:layout_width="fill_parent" android:minWidth="145sp" android:textSize="10sp"></TextView>
 	</AbsoluteLayout>
 </LinearLayout>
