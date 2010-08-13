@@ -3,11 +3,10 @@ package br.com.portovias;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -16,15 +15,16 @@ public class WidgetUpdater extends Thread {
 	private Context context;
 	private int[] appWidgetIds;
 	private AppWidgetManager appWidgetManager;
-	private static SimpleDateFormat sf = new SimpleDateFormat("dd/MM hh:mm:ss");
+	private static SimpleDateFormat sf = new SimpleDateFormat("dd/MM HH:mm:ss");
 
 	public WidgetUpdater(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 		this.context = context;
-		this.appWidgetIds = appWidgetIds;
+		this.appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, PortoviasAppWidgetProvider.class));;
 		this.appWidgetManager = appWidgetManager;
 	}
 
 	public void run() {
+		Log.i("Portovias Widget", "Ids: " + getAppWidgetIds());
 		RemoteViews r = new RemoteViews(context.getPackageName(), R.layout.widget);
 		try {
 			r.setViewVisibility(R.id.ProgressBarLayour, View.VISIBLE);
@@ -39,18 +39,23 @@ public class WidgetUpdater extends Thread {
 					r.setTextViewText(R.id.ResultText, content);
 					r.setTextViewText(R.id.LastUpdatedTextView, sf.format(Calendar.getInstance().getTime()));
 				} catch (Exception e) {
+					Log.e("Portovias Widget", "Sem conexao: " + e.getMessage());
 				}
 			}
-
-			Intent intent = new Intent(context, AlarmReceiver.class);
-			PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-			r.setOnClickPendingIntent(R.id.WidgetLayout, pendingIntent);
-			AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-			am.set(AlarmManager.RTC, System.currentTimeMillis() + (60 * 1000), pendingIntent);
 		} catch (Exception e) {
+			Log.e("Portovias Widget", "Erro estranho: " + e.getMessage());
 		} finally {
+			r.setOnClickPendingIntent(R.id.WidgetLayout, PortoviasHelper.createPendingIntent(context));
 			r.setViewVisibility(R.id.ProgressBarLayour, View.GONE);
 			appWidgetManager.updateAppWidget(appWidgetIds, r);
 		}
+	}
+
+	private String getAppWidgetIds() {
+		String s = "";
+		for (int id : appWidgetIds) {
+			s += Integer.valueOf(id) + ", ";
+		}
+		return s;
 	}
 }

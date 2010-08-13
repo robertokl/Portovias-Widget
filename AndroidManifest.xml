@@ -3,7 +3,7 @@
       package="br.com.portovias"
       android:versionCode="1"
       android:versionName="1.0">
-    <application android:icon="@drawable/icon" android:label="@string/app_name">
+    <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="true">
  
 		<receiver android:name=".PortoviasAppWidgetProvider" android:label="@string/app_name">
 		    <intent-filter>
@@ -21,7 +21,7 @@
    				 </intent-filter>
          </activity>	
          
-         <receiver android:name="AlarmReceiver" class=".AlarmReceiver" />
+         <receiver android:name="PortoviasAppWidgetProvider" class=".PortoviasAppWidgetProvider" />
     </application>
 	<uses-permission android:name="android.permission.INTERNET" />
 </manifest> 

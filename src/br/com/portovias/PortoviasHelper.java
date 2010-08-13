@@ -11,7 +11,9 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
@@ -72,6 +74,11 @@ public class PortoviasHelper {
 		} catch (NameNotFoundException e) {
 			Log.e(TAG, "Couldn't find package information in PackageManager", e);
 		}
+	}
+	
+	public static PendingIntent createPendingIntent(Context context) {
+		Intent intent = new Intent(context, PortoviasAppWidgetProvider.class);
+		return PendingIntent.getBroadcast(context, 0, intent, 0);
 	}
 
 	protected static synchronized String getUrlContent(String login,
