@@ -42,7 +42,7 @@ public class Portovias extends Activity implements OnClickListener{
         	   PortoviasHelper.setPassword(password.getText().toString(), this);
         	   
         	   AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-        	   PortoviasAppWidgetProvider.updateView(this, appWidgetManager, new int[] {mAppWidgetId});
+        	   PortoviasAppWidgetProvider.updateView(this, appWidgetManager);
         	   
         	   Intent resultValue = new Intent();
                resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);

@@ -13,18 +13,17 @@ import android.widget.RemoteViews;
 public class WidgetUpdater extends Thread {
 
 	private Context context;
-	private int[] appWidgetIds;
 	private AppWidgetManager appWidgetManager;
 	private static SimpleDateFormat sf = new SimpleDateFormat("dd/MM HH:mm:ss");
 
-	public WidgetUpdater(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+	public WidgetUpdater(Context context, AppWidgetManager appWidgetManager) {
 		this.context = context;
-		this.appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, PortoviasAppWidgetProvider.class));;
 		this.appWidgetManager = appWidgetManager;
 	}
 
 	public void run() {
-		Log.i("Portovias Widget", "Ids: " + getAppWidgetIds());
+		int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, PortoviasAppWidgetProvider.class));
+		Log.i("Portovias Widget", "Ids: " + getAppWidgetIds(appWidgetIds));
 		RemoteViews r = new RemoteViews(context.getPackageName(), R.layout.widget);
 		try {
 			r.setViewVisibility(R.id.ProgressBarLayour, View.VISIBLE);
@@ -51,7 +50,7 @@ public class WidgetUpdater extends Thread {
 		}
 	}
 
-	private String getAppWidgetIds() {
+	private String getAppWidgetIds(int[] appWidgetIds) {
 		String s = "";
 		for (int id : appWidgetIds) {
 			s += Integer.valueOf(id) + ", ";
