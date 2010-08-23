@@ -47,6 +47,7 @@ public class WidgetUpdater extends Thread {
 			r.setOnClickPendingIntent(R.id.WidgetLayout, PortoviasHelper.createPendingIntent(context));
 			r.setViewVisibility(R.id.ProgressBarLayour, View.GONE);
 			appWidgetManager.updateAppWidget(appWidgetIds, r);
+			PortoviasHelper.setAlarm(context);
 		}
 	}
 

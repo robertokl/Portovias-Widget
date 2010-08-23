@@ -10,7 +10,9 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
 
+import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +21,7 @@ import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.SystemClock;
 import android.util.Log;
 
 public class PortoviasHelper {
@@ -33,7 +36,6 @@ public class PortoviasHelper {
 	private static String sUserAgent = null;
 
 	private static String portoviasUrl = "http://path.heroku.com/?login=%s&password=%s&format=xml";
-
 
 	public static String getUsername(Context context) {
 		return getDbValue("username", context);
@@ -66,41 +68,44 @@ public class PortoviasHelper {
 		try {
 			// Read package name and version number from manifest
 			PackageManager manager = context.getPackageManager();
-			PackageInfo info = manager.getPackageInfo(context.getPackageName(),
-					0);
-			sUserAgent = String.format("%s/%s (Linux; Android)",
-					info.packageName, info.versionName);
+			PackageInfo info = manager.getPackageInfo(context.getPackageName(), 0);
+			sUserAgent = String.format("%s/%s (Linux; Android)", info.packageName, info.versionName);
 
 		} catch (NameNotFoundException e) {
 			Log.e(TAG, "Couldn't find package information in PackageManager", e);
 		}
 	}
-	
+
 	public static PendingIntent createPendingIntent(Context context) {
 		Intent intent = new Intent(context, PortoviasAppWidgetProvider.class);
 		return PendingIntent.getBroadcast(context, 0, intent, 0);
 	}
 
-	protected static synchronized String getUrlContent(String login,
-			String password) throws Exception {
+	public static void setAlarm(Context context) {
+		int refreshRate = 90 * 1000;
+		AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+		am.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + refreshRate, createPendingIntent(context));
+	}
+
+	protected static synchronized String getUrlContent(String login, String password) throws Exception {
 		if (sUserAgent == null) {
 			throw new Exception("User-Agent string must be prepared");
 		}
 
 		// Create client and set our specific user-agent string
 		HttpClient client = new DefaultHttpClient();
-		HttpGet request = new HttpGet(String.format(portoviasUrl, login,
-				password));
+		HttpGet request = new HttpGet(String.format(portoviasUrl, login, password));
 		request.setHeader("User-Agent", sUserAgent);
 
 		try {
+			HttpConnectionParams.setConnectionTimeout(client.getParams(), 2000);
+			HttpConnectionParams.setSoTimeout(client.getParams(), 20000);
 			HttpResponse response = client.execute(request);
 
 			// Check if server response is valid
 			StatusLine status = response.getStatusLine();
 			if (status.getStatusCode() != HTTP_STATUS_OK) {
-				throw new Exception("Invalid response from server: "
-						+ status.toString());
+				throw new Exception("Invalid response from server: " + status.toString());
 			}
 
 			// Pull content stream from response
